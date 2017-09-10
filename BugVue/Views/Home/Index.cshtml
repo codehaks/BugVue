@@ -1,0 +1,146 @@
+﻿@{
+    ViewData["Title"] = "VueBug Demo";
+}
+
+<div id="app">
+    <h2>Bugs</h2>
+    <hr />
+
+    <a href="#" class="btn btn-success" v-on:click="showModal">Add new ...</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tr v-for="(bug,index) in bugs">
+            <td>{{index+1}}</td>
+            <td>{{bug.name}}</td>
+            <td>{{bug.description}}</td>
+            <td>
+                <a href="#" class="btn btn-danger" v-on:click="removeBug(bug,index)">Remove</a>
+                <a href="#" class="btn btn-primary" v-on:click="editBug(bug,index)">Edit</a>
+            </td>
+        </tr>
+    </table>
+
+    @Html.Partial("_modals")
+</div>
+@section Scripts{
+
+    <script src="~/lib/vue/vue.min.js"></script>
+
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+                bugs: [],
+                name: "",
+                description: "",
+                editItemIndex: null,
+                editItemId: null
+
+            },
+            created: function () {
+                this.getBugs();
+
+            },
+            methods: {
+                clearData: function () {
+                    var vm = this;
+
+                    vm.name = "";
+                    vm.description = "";
+                    vm.editItemIndex = null;
+                    vm.editItemId = null;
+                },
+
+                editBug: function (item, index) {
+
+                    this.name = item.name;
+                    this.description = item.description;
+                    editItemIndex = index;
+                    editItemId = item.id;
+                    $('#editBugModal').modal('show');
+                },
+
+                editBugConfirm: function (item) {
+                    var vm = this;
+
+                    var newBug = {
+                        id: editItemId,
+                        name: vm.name,
+                        description: vm.description
+                    }
+
+                    $.ajax({ url: "/bug", data: newBug, method: "PUT" })
+                        .done(function () {
+                            vm.bugs[editItemIndex].name = vm.name;
+                            vm.bugs[editItemIndex].description = vm.description;
+                            toastr.success("Success");
+                        }).fail(function () {
+                            toastr.error("Error");
+                        }).always(function () {
+                            vm.clearData();
+                        });
+
+                    $('#editBugModal').modal('hide');
+                },
+                removeBug: function (item, index) {
+                    var vm = this;
+
+                    var bugToDelete = {
+                        id: item.id
+                    }
+
+                    $.ajax({ url: "/bug", data: bugToDelete, method: "DELETE" })
+                        .done(function (data) {
+                            vm.bugs.splice(index, 1);
+                            toastr.success("Success");
+                        }).fail(function () {
+                            toastr.error("Error");
+                        });
+                },
+
+                addBug: function () {
+                    var vm = this;
+
+                    var newBug = {
+                        name: vm.name,
+                        description: vm.description
+                    }
+
+                    $.ajax({ url: "/bug", data: newBug, method: "POST" })
+                        .done(function (data) {
+                            vm.bugs.splice(0, 0, newBug);
+                            toastr.success("Success");
+                        }).fail(function () {
+                            toastr.error("Error");
+                        }).always(function () {
+                            vm.clearData();
+                        });
+
+                    $('#newBugModal').modal('hide');
+
+                },
+                getBugs: function () {
+                    var vm = this;
+                    $.ajax({ url: "/bug", method: "GET" })
+                        .done(function (data) {
+                            vm.bugs = data;
+                            toastr.success("Success");
+                        }).fail(function () {
+                            toastr.error("Error");
+                        });
+                },
+                showModal: function () {
+                    var vm = this;
+                    $('#newBugModal').modal('show');
+                }
+            }
+        });
+    </script>
+}
