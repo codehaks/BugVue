@@ -3,10 +3,10 @@
 }
 
 <div id="app">
-    <h2>Bugs</h2>
+    <h2>BugVue 1.0</h2>
     <hr />
 
-    <a href="#" class="btn btn-success" v-on:click="showModal">Add new ...</a>
+    <a href="#" class="btn btn-success" v-on:click="showModal"> New ...</a>
     <table class="table">
         <thead>
             <tr>
@@ -26,8 +26,8 @@
             </td>
         </tr>
     </table>
-
-    @Html.Partial("_modals")
+    <partial name="_modals" />
+    
 </div>
 @section Scripts{
 
@@ -80,9 +80,9 @@
                         .done(function () {
                             vm.bugs[editItemIndex].name = vm.name;
                             vm.bugs[editItemIndex].description = vm.description;
-                            toastr.success("Success");
+                            toastr.success("Bug updated.");
                         }).fail(function () {
-                            toastr.error("Error");
+                            toastr.error("Can not update this bug.");
                         }).always(function () {
                             vm.clearData();
                         });
@@ -99,9 +99,9 @@
                     $.ajax({ url: "/bug", data: bugToDelete, method: "DELETE" })
                         .done(function (data) {
                             vm.bugs.splice(index, 1);
-                            toastr.success("Success");
+                            toastr.success("Bug removed");
                         }).fail(function () {
-                            toastr.error("Error");
+                            toastr.error("Can not remove this bug!");
                         });
                 },
 
@@ -116,9 +116,9 @@
                     $.ajax({ url: "/bug", data: newBug, method: "POST" })
                         .done(function (data) {
                             vm.bugs.splice(0, 0, newBug);
-                            toastr.success("Success");
+                            toastr.success("New bug added.");
                         }).fail(function () {
-                            toastr.error("Error");
+                            toastr.error("Can not add new bug!");
                         }).always(function () {
                             vm.clearData();
                         });
@@ -131,9 +131,9 @@
                     $.ajax({ url: "/bug", method: "GET" })
                         .done(function (data) {
                             vm.bugs = data;
-                            toastr.success("Success");
+                            toastr.success("All bugs loaded.");
                         }).fail(function () {
-                            toastr.error("Error");
+                            toastr.error("Can not load bugs!");
                         });
                 },
                 showModal: function () {
