@@ -115,6 +115,7 @@
 
                     $.ajax({ url: "/bug", data: newBug, method: "POST" })
                         .done(function (data) {
+                            newBug.id = data.id;
                             vm.bugs.splice(0, 0, newBug);
                             toastr.success("New bug added.");
                         }).fail(function () {
