@@ -9,7 +9,7 @@ using System;
 
 namespace BugVue.Migrations
 {
-    [DbContext(typeof(BugDb))]
+    [DbContext(typeof(BugDbContext))]
     [Migration("20170910192155_InitialDb")]
     partial class InitialDb
     {

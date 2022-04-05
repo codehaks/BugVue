@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BugVue.Data
 {
-    public class BugDb:DbContext
+    public class BugDbContext:DbContext
     {
-        public BugDb(DbContextOptions<BugDb> options)
+        public BugDbContext(DbContextOptions<BugDbContext> options)
                 : base(options)
             {
         }

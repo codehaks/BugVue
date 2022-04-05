@@ -9,7 +9,7 @@ using System;
 
 namespace BugVue.Migrations
 {
-    [DbContext(typeof(BugDb))]
+    [DbContext(typeof(BugDbContext))]
     partial class BugDbModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

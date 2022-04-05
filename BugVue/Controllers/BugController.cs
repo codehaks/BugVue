@@ -6,9 +6,9 @@ namespace BugVue.Controllers
 {
     public class BugController : Controller
     {
-        private readonly BugDb _db;
+        private readonly BugDbContext _db;
 
-        public BugController(BugDb bugDb)
+        public BugController(BugDbContext bugDb)
         {
             _db = bugDb;
         }
